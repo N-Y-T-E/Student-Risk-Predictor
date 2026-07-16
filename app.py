@@ -13,25 +13,25 @@ st.set_page_config(page_title="Academic Analytics Portal", page_icon="📊", lay
 
 # --- HIDE ALL STREAMLIT & GITHUB BRANDING (WITHOUT HIDING SIDEBAR CONTROLS) ---
 hide_style = """
-    <style>
-    /* Hide the main menu (three dots) */
-    #MainMenu {visibility: hidden !important;}
-    
-    /* Hide the footer */
-    footer {visibility: hidden !important;}
-    
-    /* Hide the deploy button */
-    .stAppDeployButton {display: none !important;}
-    
-    /* Hide the header colorful line decoration */
-    [data-testid="stDecoration"] {display: none !important;}
-    
-    /* Hide the standard header background but keep the container so the sidebar toggle arrow works */
-    [data-testid="stHeader"] {
-        background-color: rgba(0,0,0,0) !important;
-        background-image: none !important;
-    }
-    </style>
+<style>
+/* Hide the main menu (three dots) */
+#MainMenu {visibility: hidden !important;}
+
+/* Hide the footer */
+footer {visibility: hidden !important;}
+
+/* Hide the deploy button */
+.stAppDeployButton {display: none !important;}
+
+/* Hide the header colorful line decoration */
+[data-testid="stDecoration"] {display: none !important;}
+
+/* Keep the sidebar toggle arrow working but hide header background */
+[data-testid="stHeader"] {
+background-color: rgba(0,0,0,0) !important;
+background-image: none !important;
+}
+</style>
 """
 st.markdown(hide_style, unsafe_allow_html=True)
 
@@ -39,28 +39,22 @@ st.markdown(hide_style, unsafe_allow_html=True)
 from streamlit.components.v1 import html
 html("""
 <script>
-    const hideBadges = () => {
-        window.top.document.querySelectorAll('a[href*="streamlit.io"]').forEach(el => {
-            el.style.display = 'none';
-        });
-        window.top.document.querySelectorAll('[data-testid="stStatusWidget"]').forEach(el => {
-            el.style.display = 'none';
-        });
-        window.top.document.querySelectorAll('.viewerBadge').forEach(el => {
-            el.style.display = 'none';
-        });
-    };
-    hideBadges();
-    setInterval(hideBadges, 500);
+const hideBadges = () => {
+window.top.document.querySelectorAll('a[href*="streamlit.io"]').forEach(el => {
+el.style.display = 'none';
+});
+window.top.document.querySelectorAll('[data-testid="stStatusWidget"]').forEach(el => {
+el.style.display = 'none';
+});
+window.top.document.querySelectorAll('.viewerBadge').forEach(el => {
+el.style.display = 'none';
+});
+};
+hideBadges();
+setInterval(hideBadges, 500);
 </script>
 """, height=0)
 # -------------------------------------------------------------------------------
-    
-
-    hideBadges();
-    setInterval(hideBadges, 500);
-</script>
-""", height=0)
 # --------------------------------------------
 
 st.title("🏫 Academic Performance Analytics Portal")
