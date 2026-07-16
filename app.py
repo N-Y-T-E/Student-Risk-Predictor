@@ -3,7 +3,6 @@ import pandas as pd
 import joblib
 
 # 1. Load the pre-trained model engine
-# We use try/except so the app doesn't crash if the file moves
 try:
     model = joblib.load('student_model.pkl')
 except:
@@ -12,20 +11,45 @@ except:
 # 2. Page Configuration & Design
 st.set_page_config(page_title="Academic Analytics Portal", page_icon="📊", layout="centered")
 
+# --- HIDE ALL STREAMLIT & GITHUB BRANDING ---
+# CSS to hide standard header, footer, and deploy buttons
 hide_style = """
     <style>
-    #MainMenu {visibility: hidden;}
+    #MainMenu {visibility: hidden; height: 0px;}
     footer {visibility: hidden;}
-    header {visibility: hidden;}
-    /* Targets the floating "Hosted with Streamlit" badge container */
-    [data-testid="stStatusWidget"] {display: none;} 
+    header {visibility: hidden; height: 0px;}
     .stAppDeployButton {display: none;}
+    [data-testid="stToolbar"] {visibility: hidden; height: 0px;}
+    [data-testid="stDecoration"] {visibility: hidden; height: 0px;}
+    [data-testid="stStatusWidget"] {visibility: hidden; height: 0px;}
     </style>
 """
+st.markdown(hide_style, unsafe_allow_html=True)
 
-st.markdown(hide_style, unsafe_allow_html=True)
-# ------------------------------------------------------------------------
-st.markdown(hide_style, unsafe_allow_html=True)
+# JavaScript hack to break out of iframe and hide the floating "Hosted with Streamlit" badge
+from streamlit.components.v1 import html
+html("""
+<script>
+    const hideBadges = () => {
+        // Find and hide any links pointing to streamlit
+        window.top.document.querySelectorAll('a[href*="streamlit.io"]').forEach(el => {
+            el.style.display = 'none';
+        });
+        // Find and hide the status widget/badge containers
+        window.top.document.querySelectorAll('[data-testid="stStatusWidget"]').forEach(el => {
+            el.style.display = 'none';
+        });
+        window.top.document.querySelectorAll('.viewerBadge').forEach(el => {
+            el.style.display = 'none';
+        });
+    };
+    
+    // Run immediately and also set an interval because Streamlit renders elements dynamically
+    hideBadges();
+    setInterval(hideBadges, 500);
+</script>
+""", height=0)
+# --------------------------------------------
 
 st.title("🏫 Academic Performance Analytics Portal")
 st.markdown("""
@@ -47,7 +71,6 @@ st.subheader("📋 Evaluation Summary")
 
 if st.button("Run Performance Diagnostic"):
     if model is not None:
-        # Format input data to match the model training structure exactly
         internet_encoded = 1 if internet == "Yes" else 0
         input_data = pd.DataFrame([{
             'Attendance_Pct': attendance,
@@ -56,11 +79,9 @@ if st.button("Run Performance Diagnostic"):
             'Internet_Access': internet_encoded
         }])
         
-        # Execute prediction
         prediction = model.predict(input_data)[0]
         probabilities = model.predict_proba(input_data)[0]
         
-        # Display Results
         st.markdown("### System Diagnosis:")
         if prediction == 1:
             risk_pct = probabilities[1] * 100
