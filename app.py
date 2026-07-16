@@ -17,8 +17,14 @@ hide_style = """
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
+    /* Targets the floating "Hosted with Streamlit" badge container */
+    [data-testid="stStatusWidget"] {display: none;} 
+    .stAppDeployButton {display: none;}
     </style>
 """
+
+st.markdown(hide_style, unsafe_allow_html=True)
+# ------------------------------------------------------------------------
 st.markdown(hide_style, unsafe_allow_html=True)
 
 st.title("🏫 Academic Performance Analytics Portal")
