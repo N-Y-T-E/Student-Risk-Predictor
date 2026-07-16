@@ -11,31 +11,38 @@ except:
 # 2. Page Configuration & Design
 st.set_page_config(page_title="Academic Analytics Portal", page_icon="📊", layout="centered")
 
-# --- HIDE ALL STREAMLIT & GITHUB BRANDING ---
-# CSS to hide standard header, footer, and deploy buttons
+# --- HIDE ALL STREAMLIT & GITHUB BRANDING (WITHOUT HIDING SIDEBAR CONTROLS) ---
 hide_style = """
     <style>
-    #MainMenu {visibility: hidden; height: 0px;}
-    footer {visibility: hidden;}
-    header {visibility: hidden; height: 0px;}
-    .stAppDeployButton {display: none;}
-    [data-testid="stToolbar"] {visibility: hidden; height: 0px;}
-    [data-testid="stDecoration"] {visibility: hidden; height: 0px;}
-    [data-testid="stStatusWidget"] {visibility: hidden; height: 0px;}
+    /* Hide the main menu (three dots) */
+    #MainMenu {visibility: hidden !important;}
+    
+    /* Hide the footer */
+    footer {visibility: hidden !important;}
+    
+    /* Hide the deploy button */
+    .stAppDeployButton {display: none !important;}
+    
+    /* Hide the header colorful line decoration */
+    [data-testid="stDecoration"] {display: none !important;}
+    
+    /* Hide the standard header background but keep the container so the sidebar toggle arrow works */
+    [data-testid="stHeader"] {
+        background-color: rgba(0,0,0,0) !important;
+        background-image: none !important;
+    }
     </style>
 """
 st.markdown(hide_style, unsafe_allow_html=True)
 
-# JavaScript hack to break out of iframe and hide the floating "Hosted with Streamlit" badge
+# JavaScript to catch the stubborn floating badge in the bottom-right corner
 from streamlit.components.v1 import html
 html("""
 <script>
     const hideBadges = () => {
-        // Find and hide any links pointing to streamlit
         window.top.document.querySelectorAll('a[href*="streamlit.io"]').forEach(el => {
             el.style.display = 'none';
         });
-        // Find and hide the status widget/badge containers
         window.top.document.querySelectorAll('[data-testid="stStatusWidget"]').forEach(el => {
             el.style.display = 'none';
         });
@@ -43,6 +50,11 @@ html("""
             el.style.display = 'none';
         });
     };
+    hideBadges();
+    setInterval(hideBadges, 500);
+</script>
+""", height=0)
+# -------------------------------------------------------------------------------
     
     // Run immediately and also set an interval because Streamlit renders elements dynamically
     hideBadges();
