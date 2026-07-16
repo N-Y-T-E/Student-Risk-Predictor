@@ -56,7 +56,7 @@ html("""
 """, height=0)
 # -------------------------------------------------------------------------------
     
-    // Run immediately and also set an interval because Streamlit renders elements dynamically
+
     hideBadges();
     setInterval(hideBadges, 500);
 </script>
