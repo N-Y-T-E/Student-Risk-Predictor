@@ -12,6 +12,15 @@ except:
 # 2. Page Configuration & Design
 st.set_page_config(page_title="Academic Analytics Portal", page_icon="📊", layout="centered")
 
+hide_style = """
+    <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    </style>
+"""
+st.markdown(hide_style, unsafe_allow_html=True)
+
 st.title("🏫 Academic Performance Analytics Portal")
 st.markdown("""
 This system uses predictive modeling to analyze student performance metrics 
